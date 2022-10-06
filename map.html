@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 
 <head>
-  <title>leaflet map test</title>
+  <title>BU Walking Society</title>
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺️</text></svg>"
+  />
   <!-- Leaflet CSS file -->
   <link
     rel="stylesheet"
@@ -26,16 +31,24 @@
   <style>
     body {
       margin: 0;
+      width: 100%;
     }
     #map {
       height: 100vh;
-      width: 100vw;
+      width: 50%;
+      margin: 0 auto;
+    }
+    #map_2 {
+      height: 100vh;
+      width: 50%;
+      margin: 0 auto;
     }
   </style>
 </head>
 
 <body>
   <div id="map"></div>
+  <div id="map_2"></div>
 
   <!-- JS Scripts -->
   <script>
@@ -45,48 +58,36 @@
 
     var houseCordsLat = 50.74407197140642;
     var houseCordsLong = -1.8731948581162023;
-    var map = L.map("map").setView([houseCordsLat, houseCordsLong], 17.5);
+
+    var map = L.map("map").setView([houseCordsLat, houseCordsLong], 11);
+
+    // var map_2 = L.map("map_2").setView([houseCordsLat, houseCordsLong], 11);
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      zoom: 15,
-      maxZoom: 20,
+      minZoom: 13,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
-    var routeStyle_1 = {
-      weight: 5,
-      opacity: 1,
-    };
+    // L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    //   minZoom: 13,
+    //   attribution:
+    //     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    // }).addTo(map_2);
 
-    $.getJSON("routes/geojsonTest.geojson", function (data) {
-      L.geoJson(data, { style: routeStyle_1, color: randomColour() }).addTo(
-        map
-      );
-    });
+    // var routeStyle_1 = {
+    //   weight: 5,
+    //   opacity: 1,
+    // };
 
-    $.getJSON("routes/Lunch_Run.geojson", function (data) {
-      L.geoJson(data, { style: routeStyle_1, color: randomColour() }).addTo(
-        map
-      );
-    });
-
-    $.getJSON("routes/Morning_Walk.geojson", function (data) {
-      L.geoJson(data, { style: routeStyle_1, color: randomColour() }).addTo(
-        map
-      );
-    });
-
-    $.getJSON("routes/Lunch_Walk.geojson", function (data) {
-      L.geoJson(data, { style: routeStyle_1, color: randomColour() }).addTo(
-        map
-      );
-    });
-
-    $.getJSON("routes/Afternoon_Walk.geojson", function (data) {
-      L.geoJson(data, { style: routeStyle_1, color: randomColour() }).addTo(
-        map
-      );
-    });
+    for (let routeCount = 0; routeCount <= 12; routeCount++) {
+      $.getJSON(`ws_routes/BUWS_${routeCount}.geojson`, function (data) {
+        L.geoJson(data, {
+          // style: routeStyle_1,
+          color: randomColour(),
+          weight: 5,
+        }).addTo(map);
+      });
+    }
   </script>
 </body>
